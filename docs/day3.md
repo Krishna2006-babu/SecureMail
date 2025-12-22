@@ -15,3 +15,12 @@ In Express, CORS can be enabled using the `cors` middleware.
 - Understood CORS and preflight OPTIONS requests
 - Fixed origin mismatch issues
 - Resolved EADDRINUSE port conflict
+
+
+## If interviewer asks:
+
+-“How does frontend send data to backend?”
+
+-You can answer:
+
+-“Using POST requests with JSON body, parsed by express.json(). Cross-origin requests are handled -using CORS middleware, and browsers send preflight OPTIONS requests before POST.”
