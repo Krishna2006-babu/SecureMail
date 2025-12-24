@@ -1,0 +1,250 @@
+🔐 JWT (JSON Web Token) — Complete Notes
+📌 What is JWT?
+
+JWT (JSON Web Token) is a stateless authentication mechanism used to securely transmit information between a client and a server.
+
+In simple words:
+
+JWT is a digital token that proves a user is logged in.
+
+🎯 Why JWT is Needed
+
+Without JWT:
+
+User must login again and again
+
+Server must store sessions (heavy & slow)
+
+With JWT:
+
+Login once
+
+Token is used for every request
+
+Server remains stateless
+
+🧠 Real-Life Analogy
+
+JWT is like a wristband at an event 🎟️:
+
+Ticket check = Login
+
+Wristband = JWT
+
+Show wristband → Enter anywhere
+
+No wristband → Entry denied
+
+🧩 JWT Flow (Step-by-Step)
+1️⃣ User Logs In
+Client → Email + Password → Server
+
+2️⃣ Server Verifies Credentials
+
+Checks email in database
+
+Compares hashed password
+
+If valid → continue
+If invalid → 401 Unauthorized
+
+3️⃣ Server Generates JWT
+jwt.sign(
+  { id: user._id },
+  JWT_SECRET,
+  { expiresIn: "1h" }
+);
+
+
+JWT contains:
+
+User identity (payload)
+
+Signature (security)
+
+Expiry time
+
+4️⃣ Server Sends JWT to Client
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+
+5️⃣ Client Stores JWT
+
+In memory
+
+Or localStorage
+
+Or cookies (production)
+
+6️⃣ Client Sends JWT with Requests
+Authorization: Bearer <JWT_TOKEN>
+
+7️⃣ Server Verifies JWT
+
+Checks signature
+
+Checks expiry
+
+Decodes payload
+
+✔ Valid → allow request
+❌ Invalid → 403 Forbidden
+
+🧱 Structure of a JWT (VERY IMPORTANT)
+
+A JWT has 3 parts, separated by dots:
+
+HEADER.PAYLOAD.SIGNATURE
+
+
+Example:
+
+xxxxx.yyyyy.zzzzz
+
+🔹 1. Header
+{
+  "alg": "HS256",
+  "typ": "JWT"
+}
+
+
+Defines:
+
+Algorithm used
+
+Token type
+
+🔹 2. Payload
+{
+  "id": "64ab123...",
+  "iat": 1710000000,
+  "exp": 1710003600
+}
+
+
+Contains:
+
+User data
+
+Issued time
+
+Expiry time
+
+⚠️ Payload is Base64 encoded, not encrypted.
+
+🔹 3. Signature
+HMACSHA256(base64(header + payload), secret)
+
+
+Purpose:
+
+Prevent token tampering
+
+Ensures token integrity
+
+🔐 What is JWT Secret?
+
+A private key known only to the server
+
+Used to sign and verify JWT
+
+Stored in .env
+
+JWT_SECRET=supersecretkey
+
+
+⚠️ Never expose this publicly.
+
+🔒 JWT Middleware (Protection Logic)
+
+Middleware checks:
+
+Is token present?
+
+Is token valid?
+
+Is token expired?
+
+jwt.verify(token, JWT_SECRET, (err, user) => {
+  if (err) return res.status(403);
+  req.user = user;
+  next();
+});
+
+🚫 Common JWT Errors (You Faced These)
+❌ 401 Unauthorized
+
+Meaning:
+
+User not authenticated
+
+Causes:
+
+Wrong email/password
+
+Token not generated
+
+❌ 403 Forbidden
+
+Meaning:
+
+Authentication failed
+
+Causes:
+
+Token missing
+
+Token expired
+
+Token invalid
+
+🧠 JWT is Stateless (KEY CONCEPT)
+
+Server does not store sessions
+
+Every request carries its own authentication data
+
+Scales very well
+
+⚖️ JWT vs Session Authentication
+Feature	Session	JWT
+Server storage	Required	Not required
+Scalability	Low	High
+Mobile friendly	❌	✔
+Stateless	❌	✔
+🔐 Security Best Practices
+
+✔ Always hash passwords
+✔ Use strong JWT secret
+✔ Set token expiry
+✔ Use HTTPS in production
+✔ Do not store sensitive data in payload
+
+🧠 JWT in SecureMail (Your Project)
+
+JWT generated on login
+
+Stored on frontend
+
+Sent in Authorization header
+
+Verified by middleware
+
+Used to protect /api/profile
+
+🧠 One-Line Interview Answer
+
+JWT is a stateless authentication mechanism where the server issues a signed token after login, and the client sends that token with each request to prove its identity.
+
+✅ Summary
+
+JWT = Proof of authentication
+
+Stateless & scalable
+
+Uses signature for security
+
+Widely used in modern backends
+
+If you want next:
